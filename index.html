@@ -2,101 +2,440 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
 <title>EROT'X — Affichage boutique</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0d0d14; width: 100vw; height: 100vh; overflow: hidden; }
-  .scene { width: 100vw; height: 100vh; background: #0d0d14; position: relative; overflow: hidden; }
-  .bg-glow { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.1; pointer-events: none; }
+
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0d0d14;
+  }
+
+  .scene {
+    width: 1920px;
+    height: 1080px;
+    background: #0d0d14;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.1;
+    pointer-events: none;
+  }
   .bg-glow.g1 { width: 600px; height: 600px; background: #cc0044; top: -150px; left: -100px; }
   .bg-glow.g2 { width: 450px; height: 450px; background: #7700aa; bottom: 0; right: -80px; }
-  .progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: rgba(204,0,68,0.6); width: 0%; z-index: 10; }
-  .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 40px 50px; opacity: 0; transition: opacity 1s ease; pointer-events: none; }
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 4px;
+    background: rgba(204,0,68,0.6);
+    width: 0%;
+    z-index: 10;
+  }
+
+  .screen {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1920px;
+    height: 1080px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    padding: 60px 40px 50px;
+    opacity: 0;
+    -webkit-transition: opacity 1s ease;
+    transition: opacity 1s ease;
+    pointer-events: none;
+  }
   .screen.active { opacity: 1; pointer-events: auto; }
 
   /* Enseigne */
-  .sign-border { display: inline-block; border: 3px solid rgba(204,0,68,0.55); border-radius: 8px; padding: 20px 80px 18px; position: relative; margin-bottom: 40px; text-align: center; }
-  .corner-dot { position: absolute; width: 10px; height: 10px; background: #cc0044; border-radius: 50%; animation: dot-blink 3s ease-in-out infinite; }
-  .corner-dot:nth-child(1){top:-5px;left:-5px} .corner-dot:nth-child(2){top:-5px;right:-5px;animation-delay:.8s}
-  .corner-dot:nth-child(3){bottom:-5px;left:-5px;animation-delay:1.6s} .corner-dot:nth-child(4){bottom:-5px;right:-5px;animation-delay:2.4s}
+  .sign-border {
+    display: inline-block;
+    border: 3px solid rgba(204,0,68,0.55);
+    border-radius: 8px;
+    padding: 20px 80px 18px;
+    position: relative;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  .corner-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: #cc0044;
+    border-radius: 50%;
+    -webkit-animation: dot-blink 3s ease-in-out infinite;
+    animation: dot-blink 3s ease-in-out infinite;
+  }
+  .corner-dot:nth-child(1){top:-5px;left:-5px}
+  .corner-dot:nth-child(2){top:-5px;right:-5px;-webkit-animation-delay:.8s;animation-delay:.8s}
+  .corner-dot:nth-child(3){bottom:-5px;left:-5px;-webkit-animation-delay:1.6s;animation-delay:1.6s}
+  .corner-dot:nth-child(4){bottom:-5px;right:-5px;-webkit-animation-delay:2.4s;animation-delay:2.4s}
+  @-webkit-keyframes dot-blink{0%,100%{opacity:1}50%{opacity:.25}}
   @keyframes dot-blink{0%,100%{opacity:1}50%{opacity:.25}}
-  .sign-name { font-family: 'Playfair Display', serif; font-size: 110px; font-weight: 700; letter-spacing: 18px; color: #fff; text-shadow: 0 0 30px rgba(204,0,68,0.35); display: block; line-height: 1; }
-  .sign-sub { font-family: 'Montserrat', sans-serif; font-size: 18px; letter-spacing: 10px; color: rgba(255,150,180,0.75); text-transform: uppercase; margin-top: 8px; display: block; }
+
+  .sign-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    font-weight: 700;
+    letter-spacing: 18px;
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(204,0,68,0.35);
+    display: block;
+    line-height: 1;
+  }
+  .sign-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    letter-spacing: 10px;
+    color: rgba(255,150,180,0.75);
+    text-transform: uppercase;
+    margin-top: 8px;
+    display: block;
+  }
 
   /* Horaires */
-  .hours-block { display: flex; align-items: center; gap: 16px; border: 1px solid rgba(204,0,68,0.25); border-radius: 6px; padding: 16px 40px; margin-bottom: 36px; background: rgba(255,255,255,0.02); }
-  .hours-text { font-family: 'Montserrat', sans-serif; font-size: 24px; color: #ffccdd; letter-spacing: 2px; }
+  .hours-block {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(204,0,68,0.25);
+    border-radius: 6px;
+    padding: 18px 50px;
+    margin-bottom: 36px;
+    background: rgba(255,255,255,0.02);
+  }
+  .hours-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    color: #ffccdd;
+    letter-spacing: 2px;
+  }
   .hours-text strong { color: #ff7799; font-weight: 600; }
 
-  /* Cinema cadre */
-  .cinema-frame { border: 1px solid rgba(180,180,220,0.22); border-radius: 10px; padding: 28px 60px 24px; margin-bottom: 36px; background: rgba(255,255,255,0.025); text-align: center; min-width: 380px; }
-  .cinema-frame-title { font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: rgba(255,180,210,0.55); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; justify-content: center; }
-  .cinema-frame-title::before,.cinema-frame-title::after{content:'';flex:1;height:1px;background:rgba(180,180,220,0.18)}
-  .cinema-types { font-family: 'Montserrat', sans-serif; font-size: 17px; letter-spacing: 4px; color: rgba(255,200,220,0.6); text-transform: uppercase; margin-bottom: 12px; }
-  .cinema-price-big { font-family: 'Playfair Display', serif; font-size: 72px; color: #fff; display: block; line-height: 1; }
-  .cinema-price-sub { font-family: 'Montserrat', sans-serif; font-size: 16px; color: rgba(255,255,255,0.35); letter-spacing: 3px; display: block; margin-top: 6px; }
+  /* Cinema */
+  .cinema-frame {
+    border: 1px solid rgba(180,180,220,0.22);
+    border-radius: 10px;
+    padding: 30px 80px 26px;
+    margin-bottom: 36px;
+    background: rgba(255,255,255,0.025);
+    text-align: center;
+    min-width: 420px;
+  }
+  .cinema-frame-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,180,210,0.55);
+    margin-bottom: 16px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 10px;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+  .cinema-frame-title::before,.cinema-frame-title::after{content:'';-webkit-flex:1;flex:1;height:1px;background:rgba(180,180,220,0.18)}
+  .cinema-types {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: rgba(255,200,220,0.6);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .cinema-price-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 90px;
+    color: #ffffff;
+    display: block;
+    line-height: 1;
+  }
+  .cinema-price-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 3px;
+    display: block;
+    margin-top: 6px;
+  }
 
   /* Chips */
-  .products-block { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-  .product-chip { font-family: 'Montserrat', sans-serif; font-size: 18px; letter-spacing: 2px; padding: 10px 26px; border-radius: 30px; color: rgba(255,200,220,0.85); border: 1px solid rgba(204,0,68,0.3); background: rgba(204,0,68,0.06); }
+  .products-block {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    gap: 14px;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+  .product-chip {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 12px 30px;
+    border-radius: 30px;
+    color: rgba(255,200,220,0.85);
+    border: 1px solid rgba(204,0,68,0.3);
+    background: rgba(204,0,68,0.06);
+  }
 
   /* Ticker */
-  .ticker-wrap { position: absolute; bottom: 12px; left: 0; right: 0; overflow: hidden; border-top: 1px solid rgba(204,0,68,0.15); padding-top: 12px; }
-  .ticker { display: flex; white-space: nowrap; animation: ticker-scroll 28s linear infinite; }
-  .ticker-text { font-family: 'Montserrat', sans-serif; font-size: 16px; letter-spacing: 3px; color: rgba(255,130,170,0.5); padding-right: 80px; text-transform: uppercase; }
+  .ticker-wrap {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    width: 1920px;
+    overflow: hidden;
+    border-top: 1px solid rgba(204,0,68,0.15);
+    padding-top: 12px;
+  }
+  .ticker {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    white-space: nowrap;
+    -webkit-animation: ticker-scroll 28s linear infinite;
+    animation: ticker-scroll 28s linear infinite;
+  }
+  .ticker-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: rgba(255,130,170,0.5);
+    padding-right: 80px;
+    text-transform: uppercase;
+  }
   .ticker-sep { color: rgba(204,0,68,0.5); padding: 0 16px; }
+  @-webkit-keyframes ticker-scroll{from{-webkit-transform:translateX(0);transform:translateX(0)}to{-webkit-transform:translateX(-50%);transform:translateX(-50%)}}
   @keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* Ecran 2 */
-  .screen2-title { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,150,180,0.4); margin-bottom: 30px; }
-  .screen2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 900px; }
-  .feature-card { border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); padding: 32px 24px 28px; text-align: center; }
-  .feature-card.wide { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding: 26px 44px; text-align: left; }
+  .screen2-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: rgba(255,150,180,0.4);
+    margin-bottom: 30px;
+  }
+  .screen2-grid {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 960px;
+  }
+  .feature-card {
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    padding: 32px 24px 28px;
+    text-align: center;
+    width: 220px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+  }
+  .feature-card.wide {
+    width: 100%;
+    -webkit-box-flex: 0;
+    -webkit-flex: none;
+    flex: none;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    padding: 26px 44px;
+    text-align: left;
+  }
   .feature-card.cinema-card { border-color: rgba(204,0,68,0.35); background: rgba(204,0,68,0.05); }
   .feature-card.cabin-card  { border-color: rgba(120,80,200,0.35); background: rgba(120,80,200,0.05); }
   .feature-icon { font-size: 52px; color: rgba(255,100,150,0.7); display: block; margin-bottom: 14px; }
   .feature-card.wide .feature-icon { font-size: 58px; margin-bottom: 0; margin-right: 26px; }
   .feature-card.cabin-card .feature-icon { color: rgba(160,120,255,0.75); }
-  .feature-name { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,220,235,0.9); display: block; }
+  .feature-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,220,235,0.9);
+    display: block;
+  }
   .feature-card.wide .feature-name { font-size: 22px; letter-spacing: 5px; }
-  .feature-desc { font-family: 'Montserrat', sans-serif; font-size: 15px; letter-spacing: 1.5px; color: rgba(255,180,210,0.45); margin-top: 7px; display: block; }
+  .feature-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    color: rgba(255,180,210,0.45);
+    margin-top: 7px;
+    display: block;
+  }
   .feature-card.cabin-card .feature-desc { color: rgba(190,160,255,0.45); }
   .feature-badge { font-family: 'Playfair Display', serif; font-size: 44px; color: #fff; display: block; white-space: nowrap; }
 
   /* Ecran 3 */
-  .s3-label { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 9px; text-transform: uppercase; color: rgba(255,150,180,0.4); margin-bottom: 40px; display: flex; align-items: center; gap: 16px; width: 100%; max-width: 900px; }
-  .s3-label::before,.s3-label::after{content:'';flex:1;height:1px;background:rgba(204,0,68,0.18)}
-  .s3-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 900px; }
-  .s3-card { border-radius: 12px; padding: 50px 30px 44px; text-align: center; }
+  .s3-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 9px;
+    text-transform: uppercase;
+    color: rgba(255,150,180,0.4);
+    margin-bottom: 40px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 16px;
+    width: 960px;
+  }
+  .s3-label::before,.s3-label::after{content:'';-webkit-flex:1;flex:1;height:1px;background:rgba(204,0,68,0.18)}
+  .s3-grid {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    gap: 20px;
+    width: 960px;
+  }
+  .s3-card {
+    border-radius: 12px;
+    padding: 50px 30px 44px;
+    text-align: center;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+  }
   .s3-card.cinema { border: 1px solid rgba(204,0,68,0.4); background: rgba(204,0,68,0.06); }
   .s3-card.cabin  { border: 1px solid rgba(140,90,220,0.4); background: rgba(140,90,220,0.06); }
   .s3-card-icon { font-size: 80px; display: block; margin-bottom: 18px; }
   .s3-card.cinema .s3-card-icon { color: rgba(255,80,130,0.65); }
   .s3-card.cabin  .s3-card-icon { color: rgba(170,120,255,0.65); }
-  .s3-card-name { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; display: block; margin-bottom: 10px; }
+  .s3-card-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+  }
   .s3-card.cinema .s3-card-name { color: rgba(255,160,190,0.7); }
   .s3-card.cabin  .s3-card-name { color: rgba(200,170,255,0.7); }
-  .s3-card-sub { font-family: 'Montserrat', sans-serif; font-size: 16px; letter-spacing: 2px; margin-bottom: 28px; display: block; line-height: 1.7; }
+  .s3-card-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    display: block;
+    line-height: 1.7;
+  }
   .s3-card.cinema .s3-card-sub { color: rgba(255,200,220,0.45); }
   .s3-card.cabin  .s3-card-sub { color: rgba(210,190,255,0.45); }
-  .s3-price { font-family: 'Playfair Display', serif; font-size: 100px; color: #fff; line-height: 1; display: block; }
-  .s3-price-unit { font-family: 'Montserrat', sans-serif; font-size: 16px; letter-spacing: 3px; color: rgba(255,255,255,0.3); display: block; margin-top: 8px; }
+  .s3-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    color: #ffffff;
+    line-height: 1;
+    display: block;
+  }
+  .s3-price-unit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    display: block;
+    margin-top: 8px;
+  }
 
-  /* Ecrans vidéo */
-  .screen.video-screen { padding: 0; background: #000; }
-  .screen.video-screen video { width: 100%; height: 100%; object-fit: contain; display: block; }
+  /* Video */
+  .screen.video-screen { padding: 0; background: #000000; }
+  .screen.video-screen video { width: 1920px; height: 1080px; object-fit: contain; display: block; }
 
   /* Badge */
-  .open-badge { position: absolute; top: 24px; right: 24px; font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; border-radius: 5px; padding: 6px 14px; z-index: 20; animation: badge-pulse 3s ease-in-out infinite; transition: color 0.5s, border 0.5s; }
+  .open-badge {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    padding: 8px 16px;
+    z-index: 20;
+    -webkit-animation: badge-pulse 3s ease-in-out infinite;
+    animation: badge-pulse 3s ease-in-out infinite;
+  }
+  @-webkit-keyframes badge-pulse{0%,100%{opacity:1}50%{opacity:.6}}
   @keyframes badge-pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
   /* Dots */
-  .dots { position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.4s, transform 0.4s; }
-  .dot.active { background: rgba(204,0,68,0.8); transform: scale(1.5); }
+  .dots {
+    position: absolute;
+    bottom: 50px;
+    left: 960px;
+    margin-left: -40px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    -webkit-transition: background 0.4s, -webkit-transform 0.4s;
+    transition: background 0.4s, transform 0.4s;
+  }
+  .dot.active { background: rgba(204,0,68,0.8); -webkit-transform: scale(1.5); transform: scale(1.5); }
 </style>
 </head>
 <body>
@@ -115,7 +454,7 @@
       <span class="sign-sub">Boutique pour adultes</span>
     </div>
     <div class="hours-block">
-      <i class="ti ti-clock" style="color:#ff7799;font-size:28px;"></i>
+      <i class="ti ti-clock" style="color:#ff7799;font-size:32px;"></i>
       <span class="hours-text">Ouvert <strong>7j/7</strong> &mdash; de <strong>10h</strong> &agrave; <strong>1h du matin</strong></span>
     </div>
     <div class="cinema-frame">
@@ -132,8 +471,8 @@
     </div>
     <div class="ticker-wrap">
       <div class="ticker">
-        <span class="ticker-text">Erot&rsquo;X &mdash; Boutique pour adultes <span class="ticker-sep">&#10022;</span> Cin&eacute;ma adulte &mdash; entr&eacute;e 15&euro; <span class="ticker-sep">&#10022;</span> Cabine priv&eacute;e &mdash; 25&euro; l&rsquo;heure <span class="ticker-sep">&#10022;</span> Ouvert 7j/7 de 10h &agrave; 1h du matin <span class="ticker-sep">&#10022;</span> Sextoys &middot; Lingerie &middot; Gadgets &middot; Accessoires <span class="ticker-sep">&#10022;</span></span>
-        <span class="ticker-text" aria-hidden="true">Erot&rsquo;X &mdash; Boutique pour adultes <span class="ticker-sep">&#10022;</span> Cin&eacute;ma adulte &mdash; entr&eacute;e 15&euro; <span class="ticker-sep">&#10022;</span> Cabine priv&eacute;e &mdash; 25&euro; l&rsquo;heure <span class="ticker-sep">&#10022;</span> Ouvert 7j/7 de 10h &agrave; 1h du matin <span class="ticker-sep">&#10022;</span> Sextoys &middot; Lingerie &middot; Gadgets &middot; Accessoires <span class="ticker-sep">&#10022;</span></span>
+        <span class="ticker-text">Erot&rsquo;X &mdash; Boutique pour adultes <span class="ticker-sep">&#10022;</span> Cin&eacute;ma adulte &mdash; entr&eacute;e 15&euro; <span class="ticker-sep">&#10022;</span> Cabine priv&eacute;e &mdash; 25&euro; l&rsquo;heure <span class="ticker-sep">&#10022;</span> Ouvert 7j/7 de 10h &agrave; 1h du matin <span class="ticker-sep">&#10022;</span> Sextoys &middot; Lingerie &middot; Gadgets &middot; Accessoires <span class="ticker-sep">&#10022;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span class="ticker-text" aria-hidden="true">Erot&rsquo;X &mdash; Boutique pour adultes <span class="ticker-sep">&#10022;</span> Cin&eacute;ma adulte &mdash; entr&eacute;e 15&euro; <span class="ticker-sep">&#10022;</span> Cabine priv&eacute;e &mdash; 25&euro; l&rsquo;heure <span class="ticker-sep">&#10022;</span> Ouvert 7j/7 de 10h &agrave; 1h du matin <span class="ticker-sep">&#10022;</span> Sextoys &middot; Lingerie &middot; Gadgets &middot; Accessoires <span class="ticker-sep">&#10022;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
     </div>
   </div>
@@ -202,14 +541,14 @@
     </div>
   </div>
 
-  <!-- ECRAN 4 : Vidéo 1 -->
+  <!-- ECRAN 4 : Video 1 -->
   <div class="screen video-screen" id="screen4">
     <video id="video1" muted playsinline preload="auto">
       <source src="1782757312226_Le_Desir_-_Lingerie_Calendar.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- ECRAN 5 : Vidéo 2 -->
+  <!-- ECRAN 5 : Video 2 -->
   <div class="screen video-screen" id="screen5">
     <video id="video2" muted playsinline preload="auto">
       <source src="1782757312227_VIVE038_-_Rini_-_Product_Video.mp4" type="video/mp4">
@@ -231,8 +570,6 @@
   var progress = document.getElementById('progress');
   var video1   = document.getElementById('video1');
   var video2   = document.getElementById('video2');
-
-  // Durées fixes pour les écrans texte (ms), 0 = attendre fin de vidéo
   var durations = [20000, 20000, 20000, 0, 0];
   var current = 0;
   var rafId = null;
@@ -255,34 +592,38 @@
   }
 
   function showScreen(index) {
-    // Stopper les vidéos
     video1.pause(); video1.currentTime = 0;
     video2.pause(); video2.currentTime = 0;
-    if (rafId) cancelAnimationFrame(rafId);
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
 
-    screens.forEach(function(s, i){ s.classList.toggle('active', i === index); });
-    dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
+    for (var i = 0; i < screens.length; i++) {
+      if (i === index) {
+        screens[i].classList.add('active');
+      } else {
+        screens[i].classList.remove('active');
+      }
+      if (i === index) {
+        dots[i].classList.add('active');
+      } else {
+        dots[i].classList.remove('active');
+      }
+    }
+
     progress.style.width = '0%';
 
     if (index === 3) {
-      // Vidéo 1
       video1.play();
       video1.onended = function() { nextScreen(); };
-      // Barre de progression basée sur la durée réelle
-      var dur = video1.duration || 17;
-      animateProgress(dur * 1000, function(){});
+      animateProgress((video1.duration || 17) * 1000, function(){});
     } else if (index === 4) {
-      // Vidéo 2
       video2.play();
       video2.onended = function() { nextScreen(); };
-      var dur2 = video2.duration || 31;
-      animateProgress(dur2 * 1000, function(){});
+      animateProgress((video2.duration || 31) * 1000, function(){});
     } else {
       animateProgress(durations[index], nextScreen);
     }
   }
 
-  // Badge ouvert / fermé
   function updateBadge() {
     var badge = document.getElementById('badge');
     var now = new Date();
