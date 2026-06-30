@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>EROT'X</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+  video {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+</style>
+</head>
+<body>
+<video id="v" autoplay muted playsinline>
+  <source src="https://drive.google.com/uc?export=download&id=1rpGHGnGtD1_Zh7zMYEFIe0hczVEIJ5UH" type="video/mp4">
+</video>
+<script>
+  var v = document.getElementById('v');
+
+  function playVideo() {
+    v.currentTime = 0;
+    var p = v.play();
+    if (p !== undefined) {
+      p.catch(function() {
+        setTimeout(playVideo, 1000);
+      });
+    }
+  }
+
+  // Relance dès que la vidéo se termine
+  v.addEventListener('ended', function() {
+    playVideo();
+  });
+
+  // Relance si elle se met en pause
+  v.addEventListener('pause', function() {
+    setTimeout(function() {
+      if (v.paused) playVideo();
+    }, 500);
+  });
+
+  // Relance si elle reste bloquée
+  v.addEventListener('stalled', function() {
+    setTimeout(playVideo, 2000);
+  });
+
+  // Lancement initial
+  playVideo();
+
+  // Vérification toutes les 5 secondes que la vidéo tourne bien
+  setInterval(function() {
+    if (v.paused || v.ended) {
+      playVideo();
+    }
+  }, 5000);
+</script>
+</body>
+</html>
